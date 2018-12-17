@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="./index.css">
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+</head>
+<body>
+<div class="container">
+    <h1>Transaction template</h1>
+    <h2 id="balances"></h2>
+    <h2 id="transaction-log"></h2>
+    <label for="address" class="col-lg-2 control-label">Adress</label>
+    <input id="address" type="text">
+    <label for="address" class="col-lg-2 control-label">Number of tokens</label>
+    <input id="value" type="text">
+    <button id="button">Confirm</button>
+</div>
+<!--<script src="http://raw.githubusercontent.com/ethereum/web3.js/0.16.0/dist/web3.min.js"></script>-->
+<script>
+    // future code goes here
+
+    if (typeof web3 !== "undefined") {
+        web3 = new Web3(web3.currentProvider);
+    }
+    else {
+        // set the provider you want from Web3.providers
+        var web3 = new Web3(new Web3.providers.HttpProvider(
+            '	https://ropsten.infura.io/v3/a89d32d2485d404a89f2aeb789d502db'
+        ));
+    }
+    web3.eth.defaultAccount = web3.eth.accounts[0];
+    var UCUTokenContract = web3.eth.contract([
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "_spender",
+                    "type": "address"
+                },
+                {
+                    "name": "_value",
+                    "type": "uint256"
+                }
+            ],
+            "name": "approve",
+            "outputs": [
+                {
+                    "name": "success",
+                    "type": "bool"
+                }
+            ],
+            "payable": false,
+            "type": "function",
+            "stateMutability": "nonpayable"
+        },
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "_to",
+                    "type": "address"
+                },
+                {
+                    "name": "_value",
+                    "type": "uint256"
+                }
+            ],
+            "name": "transfer",
+            "outputs": [
+                {
+                    "name": "success",
+                    "type": "bool"
+                }
+            ],
+            "payable": false,
+            "type": "function",
+            "stateMutability": "nonpayable"
+        },
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "_from",
+                    "type": "address"
+                },
+                {
+                    "name": "_to",
+                    "type": "address"
+                },
+                {
+                    "name": "_value",
+                    "type": "uint256"
+                }
+            ],
+            "name": "transferFrom",
+            "outputs": [
+                {
+                    "name": "success",
+                    "type": "bool"
+                }
+            ],
+            "payable": false,
+            "type": "function",
+            "stateMutability": "nonpayable"
+        },
+        {
+            "inputs": [
+                {
+                    "name": "_initialSupply",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "type": "constructor",
+            "stateMutability": "nonpayable"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "name": "_from",
+                    "type": "address"
+                },
+                {
+                    "indexed": true,
+                    "name": "_to",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "name": "_value",
+                    "type": "uint256"
+                }
+            ],
+            "name": "Transfer",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "name": "_owner",
+                    "type": "address"
+                },
+                {
+                    "indexed": true,
+                    "name": "_spender",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "name": "_value",
+                    "type": "uint256"
+                }
+            ],
+            "name": "Approval",
+            "type": "event"
+        },
+        {
+            "constant": true,
+            "inputs": [
+                {
+                    "name": "",
+                    "type": "address"
+                },
+                {
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "allowance",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "type": "function",
+            "stateMutability": "view"
+        },
+        {
+            "constant": true,
+            "inputs": [
+                {
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "balanceOf",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "type": "function",
+            "stateMutability": "view"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "name",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "payable": false,
+            "type": "function",
+            "stateMutability": "view"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "standard",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "payable": false,
+            "type": "function",
+            "stateMutability": "view"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "symbol",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "payable": false,
+            "type": "function",
+            "stateMutability": "view"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "totalSupply",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "type": "function",
+            "stateMutability": "view"
+        }
+    ]);
+    var UCUToken = UCUTokenContract.at('0x65a7a3a994882a5e285e19b2e3bdaf56a7f99595');
+
+    var trasnferEvent = UCUToken.Transfer();
+
+    trasnferEvent.watch(function (error, result) {
+        if (!error) {
+            $("#transaction-log").html("Address " + result.args._to
+                + " recieved: " + result.args._value.toString());
+            recheckBalances()
+        }
+        else {
+            console.log(error);
+        }
+    });
+
+    $("#button").click(function () {
+        UCUToken.transfer($("#address").val(), $("#value").val(), function (error, result) {
+            if (!error)
+                console.log(JSON.stringify(result));
+            else
+                console.error(error);
+        })
+    })
+    var addreses = ["0x68F074d6eFF2EfEDDa3dC36BeB1E238C3117c90F", "0x8e5F67a644f87b6226EeBB0270764661Cfbff6C4"];
+    var currentBalances = {};
+
+    //    $("#balances").html(printBalance("0x68F074d6eFF2EfEDDa3dC36BeB1E238C3117c90F", ))
+
+    function recheckBalances() {
+
+        addreses.forEach(function (address) {
+            UCUToken.balanceOf(address, function (error, result) {
+                if (!error) {
+                    currentBalances[address] = result.c.toString();
+                    printBalance()
+                }
+                else
+                    console.error(error);
+            })
+        });
+    }
+
+    function printBalance() {
+        var result = "";
+        for (var address in currentBalances) {
+            var value = currentBalances[address];
+
+            result = result + address + " - " + value + "\n"
+        }
+        $("#balances").html(result.toString());
+    }
+
+    recheckBalances();
+
+</script>
+</body>
+</html>
